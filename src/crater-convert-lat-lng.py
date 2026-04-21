@@ -1,15 +1,18 @@
 # Emporia: 34 failed
 # charles city: 164 failed
+# dinwiddie: 462 failed
+# greensville: 53 failed
+# hopewell: 87 failed
 
 
 import pandas as pd
 import censusgeocode as cg
 import math
 
-df = pd.read_csv("data/va_charles_city_residential.csv")
+df = pd.read_csv("data/va_petersburg_residential.csv")
 
 # keep only columns geoid, parcelnumb, address, city, szip5, and extrcond
-df = df[["geoid", "parcelnumb", "address", "city", "szip5", "condition_"]]
+df = df[["geoid", "parcelnumb", "address", "city", "szip5", "quality"]]
 
 # Census batch API needs: unique ID, street, city, state, zip
 # Build a properly formatted dataframe for it
@@ -49,4 +52,4 @@ df["lng"] = pd.to_numeric(results_df["lon"], errors="coerce")
 failed = df["lat"].isna().sum()
 print(f"Geocoded {len(df) - failed}/{len(df)} addresses. {failed} failed.")
 
-df.to_csv("outputs/charles_city_conditions_coords.csv", index=False)
+df.to_csv("outputs/petersburg_conditions_coords.csv", index=False)
