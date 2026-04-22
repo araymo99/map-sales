@@ -7,7 +7,7 @@ counties = gpd.read_file(
     "data/tl_2025_us_county.zip"
 )
 # Filter to Virginia (FIPS code 51)
-target_counties = ["Charles City", "Dinwiddie","Emporia", "Hopewell", "Petersburg"]
+target_counties = ["Charles City", "Chesterfield", "Colonial Heights","Dinwiddie","Emporia", "Hopewell","Greensville","Petersburg","Prince George","Sussex","Surry"]
 va_counties = counties[(counties["STATEFP"] == "51") & (counties["NAME"].isin(target_counties))]
 
 # read in the geocoded universal conditions data for each county and combine into one dataframe
@@ -24,11 +24,9 @@ emporia["county"] = "Emporia"
 hopewell = pd.read_csv("outputs/hopewell_conditions_universal.csv")
 hopewell["county"] = "Hopewell"
 
-petersburg = pd.read_csv("outputs/petersburg_conditions_universal.csv")
-petersburg["county"] = "Petersburg"
 
 # combine all dataframes into one
-df = pd.concat([charles_city, dinwiddie, emporia, hopewell, petersburg], ignore_index=True)
+df = pd.concat([charles_city, dinwiddie, emporia, hopewell], ignore_index=True)
 
 # Convert to GeoDataFrame
 gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.lng, df.lat))
@@ -46,9 +44,11 @@ condition_colors = {
 }
 
 
+# PLOT ALL CONDITIONS
+#gdf_plot = gdf[gdf["universal_condition"].isin(condition_colors.keys())].copy()
 
-# drop NONE explicitly if you don’t want to plot it
-gdf_plot = gdf[gdf["universal_condition"].isin(condition_colors.keys())].copy()
+# PLOT POOR AND FAIR ONLY
+gdf_plot = gdf[gdf["universal_condition"].isin(["FAIR", "POOR"])].copy()
 
 # map colors
 gdf_plot["color"] = gdf_plot["universal_condition"].map(condition_colors)
@@ -66,7 +66,6 @@ gdf_plot.plot(
 
 plt.title("Residential Building Conditions in Crater PDC")
 #plt.show()
-
 
 # now plot emporia only, plot fair and poor only
 
@@ -147,20 +146,6 @@ hopewell_gdf.plot(
     alpha=0.7
 )
 plt.title("Fair and Poor Residential Building Conditions in Hopewell")
-#plt.show()
 
-# now plot petersburg only, plot fair and poor only
 
-petersburg_gdf = gdf[gdf["county"] == "Petersburg"].copy()
-petersburg_gdf = petersburg_gdf[petersburg_gdf["universal_condition"].isin(["FAIR", "POOR"])].copy()
-petersburg_gdf["color"] = petersburg_gdf["universal_condition"].map(condition_colors)
-fig, ax = plt.subplots(figsize=(10, 10))
-va_counties[va_counties["NAME"] == "Petersburg"].plot(ax=ax, color="whitesmoke", edgecolor="black")
-petersburg_gdf.plot(
-    ax=ax,
-    color=petersburg_gdf["color"],
-    markersize=60,
-    alpha=0.7
-)
-plt.title("Fair and Poor Residential Building Conditions in Petersburg")
 plt.show()
