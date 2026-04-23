@@ -81,6 +81,9 @@ emporia_gdf.plot(
     alpha=0.7
 )
 plt.title("Fair and Poor Residential Building Conditions in Emporia")
+
+
+
 #plt.show()
 
 # now plot charles city only
@@ -149,3 +152,4 @@ plt.title("Fair and Poor Residential Building Conditions in Hopewell")
 
 
 plt.show()
+
