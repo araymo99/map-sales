@@ -38,10 +38,36 @@ gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.lng, df.lat))
 condition_colors = {
 
     "GOOD": "green",
-    "AVERAGE": "yellow",
+    "AVERAGE": "lightblue",
     "FAIR": "orange",
     "POOR": "red",
 }
+
+
+# now plot emporia only, plot average and good only, make the good dots on top of the average dots
+
+emporia_gdf = gdf[gdf["county"] == "Emporia"].copy()
+emporia_gdf = emporia_gdf[emporia_gdf["universal_condition"].isin(["AVERAGE", "GOOD"])].copy()
+emporia_gdf["color"] = emporia_gdf["universal_condition"].map(condition_colors)
+fig, ax = plt.subplots(figsize=(30, 30))
+va_counties[va_counties["NAME"] == "Emporia"].plot(ax=ax, color="whitesmoke", edgecolor="black")
+# make the GOOD dots on top of the AVERAGE dots by plotting them separately and in the right order
+emporia_gdf_AVERAGE = emporia_gdf[emporia_gdf["universal_condition"] == "AVERAGE"]
+emporia_gdf_GOOD = emporia_gdf[emporia_gdf["universal_condition"] == "GOOD"]
+emporia_gdf_AVERAGE.plot(
+    ax=ax,
+    color=emporia_gdf_AVERAGE["color"],
+    markersize=20,
+    alpha=0.7
+)
+emporia_gdf_GOOD.plot(
+    ax=ax,
+    color=emporia_gdf_GOOD["color"],
+    markersize=20,
+    alpha=0.7
+)
+plt.title("Average and Good Residential Building Conditions in Emporia")
+
 
 
 # PLOT ALL CONDITIONS
@@ -81,6 +107,7 @@ emporia_gdf.plot(
     alpha=0.7
 )
 plt.title("Fair and Poor Residential Building Conditions in Emporia")
+
 
 
 
