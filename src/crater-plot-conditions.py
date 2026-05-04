@@ -44,30 +44,29 @@ condition_colors = {
 }
 
 
-# now plot emporia only, plot average and good only, make the good dots on top of the average dots
+# now plot hopewell only, plot average and good only, make the good dots on top of the average dots
 
-emporia_gdf = gdf[gdf["county"] == "Emporia"].copy()
-emporia_gdf = emporia_gdf[emporia_gdf["universal_condition"].isin(["AVERAGE", "GOOD"])].copy()
-emporia_gdf["color"] = emporia_gdf["universal_condition"].map(condition_colors)
-fig, ax = plt.subplots(figsize=(30, 30))
-va_counties[va_counties["NAME"] == "Emporia"].plot(ax=ax, color="whitesmoke", edgecolor="black")
+hopewell_gdf = gdf[gdf["county"] == "Hopewell"].copy()
+hopewell_gdf = hopewell_gdf[hopewell_gdf["universal_condition"].isin(["AVERAGE", "GOOD"])].copy()
+hopewell_gdf["color"] = hopewell_gdf["universal_condition"].map(condition_colors)
+fig, ax = plt.subplots(figsize=(10, 10))
+va_counties[va_counties["NAME"] == "Hopewell"].plot(ax=ax, color="whitesmoke", edgecolor="black")
 # make the GOOD dots on top of the AVERAGE dots by plotting them separately and in the right order
-emporia_gdf_AVERAGE = emporia_gdf[emporia_gdf["universal_condition"] == "AVERAGE"]
-emporia_gdf_GOOD = emporia_gdf[emporia_gdf["universal_condition"] == "GOOD"]
-emporia_gdf_AVERAGE.plot(
+hopewell_gdf_AVERAGE = hopewell_gdf[hopewell_gdf["universal_condition"] == "AVERAGE"]
+hopewell_gdf_GOOD = hopewell_gdf[hopewell_gdf["universal_condition"] == "GOOD"]
+hopewell_gdf_AVERAGE.plot(
     ax=ax,
-    color=emporia_gdf_AVERAGE["color"],
-    markersize=20,
+    color=hopewell_gdf_AVERAGE["color"],
+    markersize=60,
     alpha=0.7
 )
-emporia_gdf_GOOD.plot(
+hopewell_gdf_GOOD.plot(
     ax=ax,
-    color=emporia_gdf_GOOD["color"],
-    markersize=20,
+    color=hopewell_gdf_GOOD["color"],
+    markersize=60,
     alpha=0.7
 )
-plt.title("Average and Good Residential Building Conditions in Emporia")
-
+plt.title("Average and Good Residential Building Conditions in Hopewell")
 
 
 # PLOT ALL CONDITIONS
@@ -176,6 +175,9 @@ hopewell_gdf.plot(
     alpha=0.7
 )
 plt.title("Fair and Poor Residential Building Conditions in Hopewell")
+
+
+
 
 
 plt.show()
